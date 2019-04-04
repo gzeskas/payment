@@ -1,0 +1,45 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
+	id 'java'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+group = 'lt.gzeskas'
+version = '0.0.1-SNAPSHOT'
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'lt.gzeskas.payment.PaymentApplication'
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	logbackVersion = "1.2.3"
+	junitJupiterVersion = "5.4.0"
+	jettyVersion = "9.4.15.v20190215"
+}
+
+dependencies {
+	//Logging
+	compile("org.slf4j:slf4j-api:1.7.26")
+	compile("ch.qos.logback:logback-core:$logbackVersion")
+	runtime("ch.qos.logback:logback-classic:$logbackVersion")
+
+	//HTTP server
+	compile("org.eclipse.jetty:jetty-server:$jettyVersion")
+	compile("org.eclipse.jetty:jetty-servlet:$jettyVersion")
+
+	//Test dependencies
+	testCompile("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+}
+
+test {
+	useJUnitPlatform()
+}
