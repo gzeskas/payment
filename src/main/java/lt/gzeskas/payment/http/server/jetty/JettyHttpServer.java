@@ -6,8 +6,11 @@ import lt.gzeskas.payment.http.servlet.StatusServlet;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +29,16 @@ public class JettyHttpServer implements HttpServer {
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(8080);
         server.setConnectors(new Connector[] {connector});
-        ServletHandler servletHandler = new ServletHandler();
-        server.setHandler(servletHandler);
+        ServletContextHandler servletContextHandler= new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        servletContextHandler.setContextPath("/");
+        server.setHandler(servletContextHandler);
 
-        servletHandler.addServletWithMapping(StatusServlet.class, "/status");
-        servletHandler.addServletWithMapping(AsyncStatusServlet.class, "/statusAsync");
+        ServletHolder servletHolder = servletContextHandler.addServlet(ServletContainer.class, "/api/*");
+        servletHolder.setInitOrder(0);
+        servletHolder.setInitParameter(
+                "jersey.config.server.provider.packages",
+                "lt.gzeskas.payment.web.controller"
+        );
         try {
             server.start();
         } catch (Exception e) {
