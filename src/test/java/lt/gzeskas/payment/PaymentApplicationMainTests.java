@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PaymentApplicationTests {
+class PaymentApplicationMainTests {
 
 	@Test
 	public void applicationShouldBeAbleToStart() {
