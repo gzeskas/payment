@@ -15,3 +15,6 @@ Request body should be in JSON format as example:
     "amount": 10
 }
 ```
+
+Build status
+[![CircleCI](https://circleci.com/gh/gzeskas/payment.svg?style=svg)](https://circleci.com/gh/gzeskas/payment)
