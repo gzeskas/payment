@@ -1,14 +1,13 @@
-package lt.gzeskas.payment.web.servlet.transfer;
+package lt.gzeskas.payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.*;
-import lt.gzeskas.payment.PaymentApplication;
 import lt.gzeskas.payment.configuration.ApplicationConfiguration;
 import lt.gzeskas.payment.configuration.HttpServerConfiguration;
-import lt.gzeskas.payment.datasource.AccountBalanceRepository;
-import lt.gzeskas.payment.datasource.DatabaseConnectionManager;
+import lt.gzeskas.payment.datasource.repository.AccountBalanceRepository;
 import lt.gzeskas.payment.datasource.TestDatabaseOperations;
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
+import lt.gzeskas.payment.web.servlet.transfer.TransferStatusApiResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MoneyTransferServletTest {
+public class MoneyTransferIntegrationTest {
     private static PaymentApplication paymentApplication;
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();

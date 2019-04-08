@@ -1,18 +1,18 @@
-package lt.gzeskas.payment.db.init;
+package lt.gzeskas.payment.datasource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.stream.Collectors;
 
 public class DatabaseSchemaInitializer {
-    private static final String INIT_FILE_LOCATION = "/migration/init.sql";
+    private static final String INIT_FILE_LOCATION = "migration/init.sql";
     private static final Logger logger = LoggerFactory.getLogger(DatabaseSchemaInitializer.class);
 
     public void init(Connection connection) {
@@ -26,7 +26,6 @@ public class DatabaseSchemaInitializer {
         } finally {
             try {
                 statement.close();
-                //connection.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -34,12 +33,12 @@ public class DatabaseSchemaInitializer {
     }
 
     private String readFromInitFile() {
-        try {
-            return new String(Files.readAllBytes(Paths.get(getClass().getResource(INIT_FILE_LOCATION).toURI())));
-        } catch (IOException | URISyntaxException  e) {
-            logger.error("Couldn't read sql init file from resource: " + INIT_FILE_LOCATION);
-            throw new RuntimeException(e);
-        }
+        return new BufferedReader(
+                new InputStreamReader(
+                        getClass().getClassLoader().getResourceAsStream(INIT_FILE_LOCATION),
+                        Charset.defaultCharset()
+                )
+        ).lines().collect(Collectors.joining());
     }
 
 }

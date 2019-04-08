@@ -1,6 +1,6 @@
 package lt.gzeskas.payment.configuration;
 
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
 
 public class ApplicationConfiguration {
     private final DatabaseConfiguration databaseConfiguration;

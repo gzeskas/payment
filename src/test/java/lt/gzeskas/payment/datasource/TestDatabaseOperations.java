@@ -1,6 +1,6 @@
 package lt.gzeskas.payment.datasource;
 
-import lt.gzeskas.payment.exception.DataSourceSqlException;
+import lt.gzeskas.payment.domain.exception.DataSourceSqlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
-package lt.gzeskas.payment.datasource;
+package lt.gzeskas.payment.datasource.repository;
 
-import lt.gzeskas.payment.exception.AccountNotFoundException;
-import lt.gzeskas.payment.exception.DataSourceSqlException;
+import lt.gzeskas.payment.domain.exception.AccountNotFoundException;
+import lt.gzeskas.payment.domain.exception.DataSourceSqlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class PaymentTransactionRepository {
             if (rs.next()) {
                 return rs.getDouble(1);
             }
-            throw new AccountNotFoundException("Account with id: " + accountId +" not found");
+            throw new AccountNotFoundException(accountId);
         } catch (SQLException ex) {
             logger.error("SQL exception", ex);
             throw new DataSourceSqlException(ex);

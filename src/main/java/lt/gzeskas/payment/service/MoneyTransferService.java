@@ -1,14 +1,14 @@
 package lt.gzeskas.payment.service;
 
-import lt.gzeskas.payment.datasource.AccountBalanceRepository;
+import lt.gzeskas.payment.datasource.repository.AccountBalanceRepository;
 import lt.gzeskas.payment.datasource.DatabaseConnectionManager;
-import lt.gzeskas.payment.datasource.PaymentTransactionRepository;
-import lt.gzeskas.payment.domain.TransactionStatus;
-import lt.gzeskas.payment.domain.TransferRequest;
-import lt.gzeskas.payment.exception.AccountNotFoundException;
-import lt.gzeskas.payment.exception.DataSourceSqlException;
-import lt.gzeskas.payment.exception.NotEnoughMoneyException;
-import lt.gzeskas.payment.service.validator.TransferRequestValidator;
+import lt.gzeskas.payment.datasource.repository.PaymentTransactionRepository;
+import lt.gzeskas.payment.domain.MoneyTransferResponse;
+import lt.gzeskas.payment.domain.MoneyTransferRequest;
+import lt.gzeskas.payment.domain.exception.AccountNotFoundException;
+import lt.gzeskas.payment.domain.exception.DataSourceSqlException;
+import lt.gzeskas.payment.domain.exception.NotEnoughMoneyException;
+import lt.gzeskas.payment.service.validator.MoneyTransferRequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class MoneyTransferService {
     private final DatabaseConnectionManager databaseConnectionManager;
     private final PaymentTransactionRepository transactionRepository = new PaymentTransactionRepository();
     private final AccountBalanceRepository balanceRepository = new AccountBalanceRepository();
-    private final TransferRequestValidator validator = new TransferRequestValidator();
+    private final MoneyTransferRequestValidator validator = new MoneyTransferRequestValidator();
 
     public MoneyTransferService(DatabaseConnectionManager databaseConnectionManager) {
         this.databaseConnectionManager = databaseConnectionManager;
@@ -30,29 +30,29 @@ public class MoneyTransferService {
     /**
      * throws NotEnoughMoneyException, AccountNotFoundException, ValidationException, DataSourceSqlException
      */
-    public TransactionStatus transfer(TransferRequest transferRequest) {
-        validator.validate(transferRequest);
+    public MoneyTransferResponse transfer(MoneyTransferRequest moneyTransferRequest) {
+        validator.validate(moneyTransferRequest);
         Connection connection = databaseConnectionManager.getConnection();
         try {
             connection.setAutoCommit(false);
             final String transactionUUID = UUID.randomUUID().toString();
-            double balance = balanceRepository.subtractBalance(transferRequest.getAccountFrom(), transferRequest.getAmount(), connection);
-            if (balance - transferRequest.getAmount() < 0.0) {
-                throw new NotEnoughMoneyException("Account with id: " + transferRequest.getAccountFrom()+ " doesn't have enough money for transfer.");
+            double balance = balanceRepository.subtractBalance(moneyTransferRequest.getAccountFrom(), moneyTransferRequest.getAmount(), connection);
+            if (balance - moneyTransferRequest.getAmount() < 0.0) {
+                throw new NotEnoughMoneyException(moneyTransferRequest.getAccountFrom());
             }
-            balanceRepository.addBalance(transferRequest.getAccountTo(), transferRequest.getAmount(), connection);
+            balanceRepository.addBalance(moneyTransferRequest.getAccountTo(), moneyTransferRequest.getAmount(), connection);
             transactionRepository.addToAccount(transactionUUID,
-                    transferRequest.getAccountTo(),
-                    transferRequest.getAmount(),
+                    moneyTransferRequest.getAccountTo(),
+                    moneyTransferRequest.getAmount(),
                     connection
             );
             transactionRepository.subtractFromAccount(transactionUUID,
-                    transferRequest.getAccountFrom(),
-                    transferRequest.getAmount(),
+                    moneyTransferRequest.getAccountFrom(),
+                    moneyTransferRequest.getAmount(),
                     connection
             );
             connection.commit();
-            return new TransactionStatus(transactionUUID);
+            return new MoneyTransferResponse(transactionUUID);
         } catch (SQLException e) {
             logger.error("Received SQL error.", e);
             rollbackTransaction(connection);

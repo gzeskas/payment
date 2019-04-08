@@ -6,6 +6,32 @@ plugins {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/test-integration/java')
+		}
+		resources.srcDir file('src/test-integration/resources')
+	}
+}
+
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+	useJUnitPlatform()
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	outputs.upToDateWhen { false }
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
 group = 'lt.gzeskas'
 version = '0.0.1-SNAPSHOT'
 
@@ -47,8 +73,7 @@ dependencies {
 	//Test dependencies
 	testCompile("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
 	testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-	testCompile("com.squareup.okhttp:okhttp:2.7.5")
-
+	integrationTestCompile("com.squareup.okhttp:okhttp:2.7.5")
 }
 
 

@@ -1,9 +1,9 @@
 package lt.gzeskas.payment.domain;
 
-public class TransactionStatus {
+public class MoneyTransferResponse {
     private final String transactionUUID;
 
-    public TransactionStatus(String transactionUUID) {
+    public MoneyTransferResponse(String transactionUUID) {
         this.transactionUUID = transactionUUID;
     }
 

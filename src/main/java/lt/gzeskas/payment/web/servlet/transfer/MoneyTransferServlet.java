@@ -1,10 +1,10 @@
 package lt.gzeskas.payment.web.servlet.transfer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.gzeskas.payment.domain.TransactionStatus;
-import lt.gzeskas.payment.domain.TransferRequest;
-import lt.gzeskas.payment.exception.AccountNotFoundException;
-import lt.gzeskas.payment.exception.NotEnoughMoneyException;
+import lt.gzeskas.payment.domain.MoneyTransferResponse;
+import lt.gzeskas.payment.domain.MoneyTransferRequest;
+import lt.gzeskas.payment.domain.exception.AccountNotFoundException;
+import lt.gzeskas.payment.domain.exception.NotEnoughMoneyException;
 import lt.gzeskas.payment.service.MoneyTransferService;
 import lt.gzeskas.payment.web.servlet.transfer.exception.BadRequestException;
 import lt.gzeskas.payment.web.servlet.transfer.exception.ValidationException;
@@ -44,7 +44,7 @@ public class MoneyTransferServlet extends HttpServlet {
             return;
         }
         try {
-            TransactionStatus transfer = moneyTransferService.transfer(new TransferRequest(
+            MoneyTransferResponse transfer = moneyTransferService.transfer(new MoneyTransferRequest(
                             moneyTransferApiRequest.getAccountFrom(),
                             moneyTransferApiRequest.getAccountTo(),
                             moneyTransferApiRequest.getAmount()

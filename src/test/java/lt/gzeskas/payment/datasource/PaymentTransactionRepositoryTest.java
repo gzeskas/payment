@@ -1,6 +1,7 @@
 package lt.gzeskas.payment.datasource;
 
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
+import lt.gzeskas.payment.datasource.repository.PaymentTransactionRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

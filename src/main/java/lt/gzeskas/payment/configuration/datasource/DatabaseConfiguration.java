@@ -1,4 +1,4 @@
-package lt.gzeskas.payment.datasource.configuration;
+package lt.gzeskas.payment.configuration.datasource;
 
 public class DatabaseConfiguration {
     private final String driverClass;

@@ -1,4 +1,4 @@
-package lt.gzeskas.payment.exception;
+package lt.gzeskas.payment.domain.exception;
 
 import java.sql.SQLException;
 

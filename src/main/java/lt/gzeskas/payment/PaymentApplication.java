@@ -2,7 +2,7 @@ package lt.gzeskas.payment;
 
 import lt.gzeskas.payment.configuration.ApplicationConfiguration;
 import lt.gzeskas.payment.datasource.DatabaseConnectionManager;
-import lt.gzeskas.payment.db.init.DatabaseSchemaInitializer;
+import lt.gzeskas.payment.datasource.DatabaseSchemaInitializer;
 import lt.gzeskas.payment.http.server.HttpServer;
 import lt.gzeskas.payment.http.server.jetty.JettyHttpServer;
 import lt.gzeskas.payment.service.MoneyTransferService;

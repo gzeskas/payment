@@ -1,6 +1,6 @@
 package lt.gzeskas.payment.datasource;
 
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

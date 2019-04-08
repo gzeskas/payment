@@ -1,8 +1,8 @@
 package lt.gzeskas.payment.datasource;
 
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
-import lt.gzeskas.payment.db.init.DatabaseSchemaInitializer;
-import lt.gzeskas.payment.exception.AccountNotFoundException;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
+import lt.gzeskas.payment.datasource.repository.AccountBalanceRepository;
+import lt.gzeskas.payment.domain.exception.AccountNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

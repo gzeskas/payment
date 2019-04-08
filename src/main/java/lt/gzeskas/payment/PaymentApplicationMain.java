@@ -2,7 +2,7 @@ package lt.gzeskas.payment;
 
 import lt.gzeskas.payment.configuration.ApplicationConfiguration;
 import lt.gzeskas.payment.configuration.HttpServerConfiguration;
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
 
 public class PaymentApplicationMain {
 	private static final int DEFAULT_HTTP_PORT = 8008;

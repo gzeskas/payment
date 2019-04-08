@@ -1,13 +1,13 @@
 package lt.gzeskas.payment.service;
 
-import lt.gzeskas.payment.datasource.AccountBalanceRepository;
+import lt.gzeskas.payment.datasource.repository.AccountBalanceRepository;
 import lt.gzeskas.payment.datasource.DatabaseConnectionManager;
 import lt.gzeskas.payment.datasource.TestDatabaseOperations;
-import lt.gzeskas.payment.datasource.configuration.DatabaseConfiguration;
-import lt.gzeskas.payment.db.init.DatabaseSchemaInitializer;
-import lt.gzeskas.payment.domain.TransferRequest;
-import lt.gzeskas.payment.exception.AccountNotFoundException;
-import lt.gzeskas.payment.exception.NotEnoughMoneyException;
+import lt.gzeskas.payment.configuration.datasource.DatabaseConfiguration;
+import lt.gzeskas.payment.datasource.DatabaseSchemaInitializer;
+import lt.gzeskas.payment.domain.MoneyTransferRequest;
+import lt.gzeskas.payment.domain.exception.AccountNotFoundException;
+import lt.gzeskas.payment.domain.exception.NotEnoughMoneyException;
 import lt.gzeskas.payment.web.servlet.transfer.exception.ValidationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,22 +41,22 @@ class MoneyTransferServiceTest {
         final long accountFrom = 12123L;
         final long accountTo = 121231233L;
         final double amount = 100.0;
-        assertThrows(AccountNotFoundException.class, () -> moneyTransferService.transfer(new TransferRequest(accountFrom, accountTo, amount)));
+        assertThrows(AccountNotFoundException.class, () -> moneyTransferService.transfer(new MoneyTransferRequest(accountFrom, accountTo, amount)));
     }
 
     @Test
-    void shouldNotBeAbleToMakeTransferWhenAccountBalanceIsToLow() throws Exception {
+    void shouldNotBeAbleToMakeTransferWhenAccountBalanceIsToLow() {
         final long accountFrom = 12123L;
         final long accountTo = 121231233L;
         final double initialAmount = 50.0;
         final double amount = 100.0;
         Connection connection = connectionManager.getConnection();
         accountBalanceRepository.createAccount(accountFrom, initialAmount, connection);
-        assertThrows(NotEnoughMoneyException.class, () -> moneyTransferService.transfer(new TransferRequest(accountFrom, accountTo, amount)));
+        assertThrows(NotEnoughMoneyException.class, () -> moneyTransferService.transfer(new MoneyTransferRequest(accountFrom, accountTo, amount)));
     }
 
     @Test
-    void shouldBeAbleToMakeTransferWhenAccountBalanceIsSufficient() throws Exception {
+    void shouldBeAbleToMakeTransferWhenAccountBalanceIsSufficient() {
         final long accountFrom = 12123L;
         final long accountTo = 121231233L;
         final double initialAmount = 100.0;
@@ -64,7 +64,7 @@ class MoneyTransferServiceTest {
         Connection connection = connectionManager.getConnection();
         accountBalanceRepository.createAccount(accountFrom, initialAmount, connection);
         accountBalanceRepository.createAccount(accountTo, 0.0, connection);
-        moneyTransferService.transfer(new TransferRequest(accountFrom, accountTo, transferAmount));
+        moneyTransferService.transfer(new MoneyTransferRequest(accountFrom, accountTo, transferAmount));
         double balanceAfterWithDraw = accountBalanceRepository.getBalance(accountFrom, connection);
         double balanceAfterAdd = accountBalanceRepository.getBalance(accountTo, connection);
         assertEquals(transferAmount, balanceAfterAdd);
@@ -72,11 +72,11 @@ class MoneyTransferServiceTest {
     }
 
     @Test
-    void shouldThrowValidationExceptionWhenTransferAmountIsBellowZero() throws Exception {
+    void shouldThrowValidationExceptionWhenTransferAmountIsBellowZero() {
         final long accountFrom = 12123L;
         final long accountTo = 121231233L;
         final double amount = -100.0;
-        assertThrows(ValidationException.class, () -> moneyTransferService.transfer(new TransferRequest(accountFrom, accountTo, amount)));
+        assertThrows(ValidationException.class, () -> moneyTransferService.transfer(new MoneyTransferRequest(accountFrom, accountTo, amount)));
     }
 
 }
